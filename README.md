@@ -1,1 +1,1 @@
-https://bickrom1.github.io/GMAIL
+https://bickrom1.github.io/GMAIL/
